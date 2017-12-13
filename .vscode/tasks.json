@@ -41,6 +41,15 @@
             "args": [
                 "clean"
             ]
+        },
+        {
+            "taskName": "prepare tests for debug",
+            "type": "shell",
+            "command": "cargo",
+            "args": [
+                "clean"
+            ],
+            "problemMatcher": []
         }
     ]
 }
