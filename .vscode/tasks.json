@@ -45,9 +45,9 @@
         {
             "taskName": "prepare tests for debug",
             "type": "shell",
-            "command": "cargo",
+            "command": "python",
             "args": [
-                "clean"
+                "prepare_tests_for_debug.py"
             ],
             "problemMatcher": []
         }

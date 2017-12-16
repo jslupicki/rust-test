@@ -22,12 +22,38 @@
             ]
         },
         {
+            "name": "tests_for_debug GDB",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/target/debug/deps/tests_for_debug.exe",
+            "args": ["--test"],
+            "stopAtEntry": true,
+            "cwd": "${workspaceRoot}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "c:/tools/mingw-w64/x86_64-7.1.0-posix-seh-rt_v5-rev2/mingw64/bin/gdb.exe",
+            "setupCommands": [
+            ]
+        },
+        {
             "name": "rust_test Windows",
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceRoot}/target/debug/rust_test.exe",
             "args": [],
-            "stopAtEntry": true,
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}",
+            "environment": [],
+            "externalConsole": true
+        },
+        {
+            "name": "tests_for_debug Windows",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/target/debug/deps/tests_for_debug.exe",
+            "args": [],
+            "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
             "environment": [],
             "externalConsole": true
