@@ -26,6 +26,8 @@ mod tests {
 
     #[test]
     fn it_works() {
-        println!("Unit test:it_works")
+        println!("Unit test:it_works");
+        let t = "witaj";
+        println!(">{}<", t)
     }
 }

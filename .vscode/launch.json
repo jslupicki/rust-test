@@ -48,15 +48,28 @@
             "externalConsole": true
         },
         {
+            "name": "AIO:tests_for_debug Windows (all in one)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/target/debug/deps/tests_for_debug.exe",
+            "args": ["--nocapture"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}",
+            "environment": [],
+            "externalConsole": false,
+            "preLaunchTask": "prepare tests for debug"
+        },
+        {
             "name": "tests_for_debug Windows",
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceRoot}/target/debug/deps/tests_for_debug.exe",
-            "args": [],
+            "args": ["--nocapture"],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
             "environment": [],
-            "externalConsole": true
+            "externalConsole": false,
+            //"preLaunchTask": "prepare tests for debug"
         }
     ]
 }
