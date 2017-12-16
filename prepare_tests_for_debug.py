@@ -19,6 +19,7 @@ if m:
     print("Find:", file_txt)
 else:
     print("Not found!")
+    exit
 
 sep_idx = file_txt.rindex(os.sep) + 1
 
