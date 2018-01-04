@@ -4,7 +4,8 @@ import os
 import shutil
 
 try:
-    out = subprocess.check_output(["cargo", "test", "--", "--non-existent-par"], stderr=subprocess.STDOUT)
+    out = subprocess.check_output(
+        ["cargo", "test", "--", "--non-existent-par"], stderr=subprocess.STDOUT)
 except subprocess.CalledProcessError as e:
     out = e.output
 
@@ -19,6 +20,7 @@ if m:
     print("Find:", file_txt)
 else:
     print("Not found!")
+    exit
 
 sep_idx = file_txt.rindex(os.sep) + 1
 
