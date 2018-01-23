@@ -7,33 +7,18 @@
             "request": "launch",
             "program": "${workspaceRoot}/target/debug/rust_test.exe",
             "args": [],
-            "stopAtEntry": false,
+            "stopAtEntry": true,
             "cwd": "${workspaceRoot}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "c:/tools/mingw-w64/x86_64-7.1.0-posix-seh-rt_v5-rev2/mingw64/bin/gdb.exe",
+            "miDebuggerPath": "c:/tools/mingw-w64/current/mingw64/bin/gdb.exe",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 }
-            ]
-        },
-        {
-            "name": "tests_for_debug GDB",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceRoot}/target/debug/deps/tests_for_debug.exe",
-            "args": ["--test"],
-            "stopAtEntry": true,
-            "cwd": "${workspaceRoot}",
-            "environment": [],
-            "externalConsole": true,
-            "MIMode": "gdb",
-            "miDebuggerPath": "c:/tools/mingw-w64/x86_64-7.1.0-posix-seh-rt_v5-rev2/mingw64/bin/gdb.exe",
-            "setupCommands": [
             ]
         },
         {
@@ -48,28 +33,15 @@
             "externalConsole": true
         },
         {
-            "name": "AIO:tests_for_debug Windows (all in one)",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "program": "${workspaceRoot}/target/debug/deps/tests_for_debug.exe",
-            "args": ["--nocapture"],
-            "stopAtEntry": false,
-            "cwd": "${workspaceRoot}",
-            "environment": [],
-            "externalConsole": false,
-            "preLaunchTask": "prepare tests for debug"
-        },
-        {
             "name": "tests_for_debug Windows",
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceRoot}/target/debug/deps/tests_for_debug.exe",
-            "args": ["--nocapture"],
+            "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
             "environment": [],
-            "externalConsole": false,
-            //"preLaunchTask": "prepare tests for debug"
+            "externalConsole": true
         }
     ]
 }

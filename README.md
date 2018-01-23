@@ -1,3 +1,3 @@
-# rus-test
+# rust-test
 
 My experiments with Rust

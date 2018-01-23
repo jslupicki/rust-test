@@ -1,24 +1,27 @@
-use test;
+use test::print;
+use log4rs;
 
 pub fn start() {
-    println!("Witaj Świecie!");
+    log4rs::init_file("log4rs.yml", Default::default()).unwrap();
+
+    info!("Witaj Świecie!");
 
     let letters = vec!["a", "b", "c", "d"];
 
-    println!("letters: {:?}", letters);
+    debug!("letters: {:?}", letters);
 
     for l in &letters {
-        println!("{}", l)
+        debug!("{}", l)
     }
 
     for i in 0..letters.len() {
-        println!("letters[{}] = {}", i, letters[i]);
+        debug!("letters[{}] = {}", i, letters[i]);
     }
 
-    println!("Żegnaj Świecie");
-    test::print("Hello");
-    test::print("World");
-    test::print("www");
+    info!("Żegnaj Świecie");
+    print("Hello");
+    print("World");
+    print("www");
 }
 
 #[cfg(test)]
@@ -26,8 +29,8 @@ mod tests {
 
     #[test]
     fn it_works() {
-        println!("Unit test:it_works");
+        debug!("Unit test:it_works");
         let t = "witaj";
-        println!(">{}<", t)
+        debug!(">{}<", t)
     }
 }
