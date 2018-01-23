@@ -31,6 +31,17 @@
             "cwd": "${workspaceRoot}",
             "environment": [],
             "externalConsole": true
+        },
+        {
+            "name": "tests_for_debug Windows",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/target/debug/deps/tests_for_debug.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}",
+            "environment": [],
+            "externalConsole": true
         }
     ]
 }
