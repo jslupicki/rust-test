@@ -1,4 +1,4 @@
-use test;
+use test::print;
 
 pub fn start() {
     println!("Witaj Świecie!");
@@ -16,9 +16,9 @@ pub fn start() {
     }
 
     println!("Żegnaj Świecie");
-    test::print("Hello");
-    test::print("World");
-    test::print("www");
+    print("Hello");
+    print("World");
+    print("www");
 }
 
 #[cfg(test)]
