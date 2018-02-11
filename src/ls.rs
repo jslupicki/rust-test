@@ -9,6 +9,7 @@ pub struct DirTree {
     files: Vec<PathBuf>,
 }
 
+#[allow(dead_code)]
 pub fn ls() -> Result<()> {
     println!("ls() here!");
     read_dir("/")?.map(|e| e.unwrap()).for_each(|e| {
@@ -21,6 +22,7 @@ pub fn ls() -> Result<()> {
 
     Ok(())
 }
+
 pub fn show_tree(path: &PathBuf) -> Result<()> {
     priv_show_tree(String::from(" "), path)
 }
