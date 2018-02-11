@@ -4,6 +4,7 @@ extern crate log4rs;
 
 mod start;
 mod test;
+mod ls;
 
 use start::start;
 
