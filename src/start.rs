@@ -19,19 +19,24 @@ pub fn start() {
     for i in 0..letters.len() {
         debug!("letters[{}] = {}", i, letters[i]);
     }
-
+/*
     info!("LS:");
     match ls() {
         Ok(_) => println!("ls() finished OK"),
         Err(e) => println!("ls() finished with ERROR: {}", e),
     }
+*/
+    let start_dir = PathBuf::from("/test1");
 
-    info!("SHOW:");
-    match show_tree(PathBuf::from("/test1")) {
-        Ok(_) => println!("show() finished OK"),
-        Err(e) => println!("show() finished with ERROR: {}", e),
+    info!("show_tree:");
+    match show_tree(&start_dir) {
+        Ok(_) => println!("show_tree() finished OK"),
+        Err(e) => println!("show_tree() finished with ERROR: {}", e),
     }
-  
+
+    info!("DirTree:");
+    let dir_tree = build_dir_tree(&start_dir);
+    println!("{}", dir_tree);
 
     info!("Żegnaj Świecie");
     print("Hello");
