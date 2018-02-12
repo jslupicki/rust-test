@@ -26,7 +26,7 @@ pub fn start() {
         Err(e) => println!("ls() finished with ERROR: {}", e),
     }
 */
-    let start_dir = PathBuf::from("/test1");
+    let start_dir = PathBuf::from("resources");
 
     info!("show_tree:");
     match show_tree(&start_dir) {
