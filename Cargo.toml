@@ -6,3 +6,5 @@ authors = ["jslupicki <jan@slupicki.com>"]
 [dependencies]
 log = "*"
 log4rs = "*"
+rand = "*"
+thread-control = "*"
