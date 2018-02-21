@@ -14,4 +14,5 @@ use start::start;
 fn main() {
     start();
     threads::start();
+    threads::start2();
 }

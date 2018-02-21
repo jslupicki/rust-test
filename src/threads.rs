@@ -7,12 +7,12 @@ use thread_control;
 use std::time::Duration;
 
 pub fn start() {
+    println!("**********************");
+    println!("Threads module start()");
+    println!("**********************");
+
     let threads_params = [('a', 50), ('b', 50), ('c', 50)];
     let mut threads = HashMap::new();
-
-    println!("***********************");
-    println!("Threads module started!");
-    println!("***********************");
 
     let (sender_from_channel, receiver_from_channel): (Sender<String>, Receiver<String>) =
         mpsc::channel();
@@ -53,10 +53,7 @@ pub fn start() {
                 }
             }
         });
-        &threads.insert(
-            name,
-            (thread, control, sender_to_channel),
-        );
+        &threads.insert(name, (thread, control, sender_to_channel));
     }
 
     let &&(_, _, ref sender_to_channel) = &threads.get(&threads_params[0].0).unwrap();
@@ -64,8 +61,7 @@ pub fn start() {
 
     loop {
         let mut all_done = true;
-        for (name, &(_, ref control, ref sender_to_channel)) in &threads
-        {
+        for (name, &(_, ref control, ref sender_to_channel)) in &threads {
             debug!("Thread {} is alive {}", name, !control.is_done());
             all_done &= control.is_done();
             match receiver_from_channel.try_recv() {
@@ -94,4 +90,57 @@ pub fn start() {
         }
         thread::sleep(Duration::from_secs(1));
     }
+}
+
+pub fn start2() {
+    println!("**********************");
+    println!("Threads module start2()");
+    println!("**********************");
+
+    let threads_params = [("A", 80), ("B", 80)];
+    let mut threads = vec![];
+
+    let (main_sender, main_receiver): (Sender<(String, String)>, Receiver<(String, String)>) =
+        mpsc::channel();
+    for &(name, percentage) in threads_params.into_iter() {
+        let (sender, receiver): (Sender<(String, String)>, Receiver<(String, String)>) =
+            mpsc::channel();
+        let main_sender = main_sender.clone();
+        let thread = thread::Builder::new()
+            .name(name.to_string())
+            .spawn(move || loop {
+                let (msg, sender_name) = receiver.recv().unwrap();
+                println!("'{}' got '{}' from '{}'", name, msg, sender_name);
+                if test(percentage) {
+                    println!("'{}' ending", name);
+                    break;
+                }
+                main_sender
+                    .send((msg + "," + name, name.to_string()))
+                    .unwrap();
+            });
+        threads.push((name, thread, sender));
+    }
+
+    threads[0]
+        .2
+        .send(("Start".to_string(), "main".to_string()))
+        .unwrap();
+    thread::sleep(Duration::from_secs(1));
+
+    while let Ok((msg, sender_name)) = main_receiver.try_recv() {
+        for &(ref name, _, ref sender) in &threads {
+            if name.to_string() != sender_name {
+                match sender.send((msg.clone(), sender_name.clone())) {
+                    Ok(()) => break,
+                    _ => continue,
+                }
+            }
+        }
+        thread::sleep(Duration::from_secs(1));
+    }
+}
+
+fn test(percentage: i32) -> bool {
+    ((random::<u8>() as f64) / 256.0 * 100.0) as i32 > percentage
 }
