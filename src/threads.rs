@@ -10,30 +10,31 @@ pub fn start() {
     let threads_params = [('a', 50), ('b', 50), ('c', 50)];
     let mut threads = HashMap::new();
 
+    println!("***********************");
     println!("Threads module started!");
+    println!("***********************");
 
+    let (sender_from_channel, receiver_from_channel): (Sender<String>, Receiver<String>) =
+        mpsc::channel();
     for &(name, percentage) in threads_params.into_iter() {
         let (sender_to_channel, receiver_to_channel): (Sender<String>, Receiver<String>) =
             mpsc::channel();
-        let (sender_from_channel, receiver_from_channel): (
-            Sender<String>,
-            Receiver<String>,
-        ) = mpsc::channel();
         let (flag, control) = thread_control::make_pair();
+        let sender = sender_from_channel.clone();
         let thread = thread::spawn(move || {
             info!("Thread '{}' started with threshold {}", name, percentage);
             while flag.alive() {
                 match receiver_to_channel.recv() {
                     Ok(msg) => {
-                        info!("Thread '{}' receive '{}'", name, msg);
+                        debug!("Thread '{}' receive '{}'", name, msg);
                         let response = match msg.as_str() {
                             "ping" => "pong",
                             _ => "ping",
                         };
                         info!("Thread '{}' responds with '{}'", name, response);
-                        sender_from_channel.send(response.to_string()).unwrap();
+                        sender.send(response.to_string()).unwrap();
                         let r = ((random::<u8>() as f64) / 256.0 * 100.0) as i32;
-                        info!(
+                        debug!(
                             "Thread '{}' drew {} with threshold {}.",
                             name, r, percentage
                         );
@@ -54,23 +55,24 @@ pub fn start() {
         });
         &threads.insert(
             name,
-            (thread, control, sender_to_channel, receiver_from_channel),
+            (thread, control, sender_to_channel),
         );
     }
 
-    let &&(_, _, ref sender_to_channel, _) = &threads.get(&threads_params[0].0).unwrap();
+    let &&(_, _, ref sender_to_channel) = &threads.get(&threads_params[0].0).unwrap();
     sender_to_channel.send("ping".to_string()).unwrap();
 
     loop {
         let mut all_done = true;
-        for (name, &(_ , ref control, ref sender_to_channel , ref receiver_from_channel)) in &threads {
-            info!("Thread {} is alive {}", name, !control.is_done());
+        for (name, &(_, ref control, ref sender_to_channel)) in &threads
+        {
+            debug!("Thread {} is alive {}", name, !control.is_done());
             all_done &= control.is_done();
             match receiver_from_channel.try_recv() {
                 Ok(msg) => {
-                    info!("From thread '{}' receive '{}'", name, msg);
+                    debug!("From thread '{}' receive '{}'", name, msg);
                     let mut sended = false;
-                    for (t, &(_ , ref control , ref sender_to_channel, _ )) in &threads {
+                    for (t, &(_, ref control, ref sender_to_channel)) in &threads {
                         if !control.is_done() && t != name {
                             info!("To thread '{}' sending '{}'", t, msg);
                             sender_to_channel.send(msg.clone()).unwrap();
@@ -82,11 +84,11 @@ pub fn start() {
                         info!("Thread '{}' is only alive so I send back '{}'", name, msg);
                         sender_to_channel.send(msg.clone()).unwrap();
                     }
-                },
-                _ => info!("From thread '{}' receive NOTHING", name),
+                }
+                _ => debug!("Receive NOTHING"),
             }
         }
-        info!("All is done = {}", all_done);
+        debug!("All is done = {}", all_done);
         if all_done {
             break;
         }

@@ -10,14 +10,14 @@ pub fn start() {
 
     let letters = vec!["a", "b", "c", "d"];
 
-    debug!("letters: {:?}", letters);
+    info!("letters: {:?}", letters);
 
     for l in &letters {
-        debug!("{}", l)
+        info!("{}", l)
     }
 
     for i in 0..letters.len() {
-        debug!("letters[{}] = {}", i, letters[i]);
+        info!("letters[{}] = {}", i, letters[i]);
     }
 /*
     info!("LS:");
@@ -49,8 +49,8 @@ mod tests {
 
     #[test]
     fn it_works() {
-        debug!("Unit test:it_works");
+        info!("Unit test:it_works");
         let t = "witaj";
-        debug!(">{}<", t)
+        info!(">{}<", t)
     }
 }
