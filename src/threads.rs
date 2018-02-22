@@ -97,7 +97,7 @@ pub fn start2() {
     println!("Threads module start2()");
     println!("**********************");
 
-    let threads_params = [("A", 80), ("B", 80)];
+    let threads_params = [("A", 80), ("B", 80), ("C", 80)];
     let mut threads = vec![];
 
     let (main_sender, main_receiver): (Sender<(String, String)>, Receiver<(String, String)>) =
@@ -106,20 +106,23 @@ pub fn start2() {
         let (sender, receiver): (Sender<(String, String)>, Receiver<(String, String)>) =
             mpsc::channel();
         let main_sender = main_sender.clone();
+        let (flag, control) = thread_control::make_pair();
         let thread = thread::Builder::new()
             .name(name.to_string())
-            .spawn(move || loop {
-                let (msg, sender_name) = receiver.recv().unwrap();
-                println!("'{}' got '{}' from '{}'", name, msg, sender_name);
-                if test(percentage) {
-                    println!("'{}' ending", name);
-                    break;
+            .spawn(move || {
+                while flag.alive() {
+                    let (msg, sender_name) = receiver.recv().unwrap();
+                    println!("'{}' got '{}' from '{}'", name, msg, sender_name);
+                    main_sender
+                        .send((msg + "," + name, name.to_string()))
+                        .unwrap();
+                    if test(percentage) {
+                        println!("'{}' ending", name);
+                        break;
+                    }
                 }
-                main_sender
-                    .send((msg + "," + name, name.to_string()))
-                    .unwrap();
             });
-        threads.push((name, thread, sender));
+        threads.push((name, thread, sender, control));
     }
 
     threads[0]
@@ -129,13 +132,24 @@ pub fn start2() {
     thread::sleep(Duration::from_secs(1));
 
     while let Ok((msg, sender_name)) = main_receiver.try_recv() {
-        for &(ref name, _, ref sender) in &threads {
-            if name.to_string() != sender_name {
+        let mut sended = false;
+        for &(ref name, _, ref sender, ref control) in &threads {
+            if name.to_string() != sender_name && !control.is_done() {
                 match sender.send((msg.clone(), sender_name.clone())) {
-                    Ok(()) => break,
+                    Ok(()) => {
+                        sended = true;
+                        break;
+                    }
                     _ => continue,
                 }
             }
+        }
+        if !sended {
+            threads
+                .iter()
+                .filter(|t| t.0.to_string() == sender_name)
+                .filter(|t| !t.3.is_done())
+                .for_each(|t| t.2.send((msg.clone(), sender_name.clone())).unwrap());
         }
         thread::sleep(Duration::from_secs(1));
     }
