@@ -4,8 +4,6 @@ use log4rs;
 use std::path::PathBuf;
 
 pub fn start() {
-    log4rs::init_file("log4rs.yml", Default::default()).unwrap();
-
     info!("Witaj Świecie!");
 
     let letters = vec!["a", "b", "c", "d"];
@@ -42,6 +40,10 @@ pub fn start() {
     print("Hello");
     print("World");
     print("www");
+}
+
+pub fn init_logs() {
+    log4rs::init_file("log4rs.yml", Default::default()).unwrap();
 }
 
 #[cfg(test)]

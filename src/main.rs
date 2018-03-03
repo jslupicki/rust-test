@@ -14,10 +14,10 @@ mod ls;
 mod threads;
 mod futures_experiments;
 mod fibers_experiments;
-use start::start;
 
 fn main() {
-    start();
+    start::init_logs();
+    //start::start();
     //threads::start();
     //threads::start2();
     //futures_experiments::start();
