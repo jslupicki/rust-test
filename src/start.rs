@@ -14,8 +14,8 @@ pub fn start() {
         info!("{}", l)
     }
 
-    for i in 0..letters.len() {
-        info!("letters[{}] = {}", i, letters[i]);
+    for (i, l) in letters.iter().enumerate() {
+        info!("letters[{}] = {}", i, l);
     }
 /*
     info!("LS:");

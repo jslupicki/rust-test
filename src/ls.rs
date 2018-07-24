@@ -63,14 +63,14 @@ pub fn build_dir_tree(path: &PathBuf) -> DirTree {
     dir
 }
 
-fn display(dir_tree: &DirTree, f: &mut fmt::Formatter, prefix: &String) -> fmt::Result {
+fn display(dir_tree: &DirTree, f: &mut fmt::Formatter, prefix: &str) -> fmt::Result {
     writeln!(
         f,
         "{}+-{}",
         prefix,
         dir_tree.path.file_name().unwrap().to_string_lossy()
     )?;
-    let prefix = prefix.clone() + "| ";
+    let prefix = prefix.to_string() + "| ";
     for dir in &dir_tree.children {
         display(dir, f, &prefix)?;
     }

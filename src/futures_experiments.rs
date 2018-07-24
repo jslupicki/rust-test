@@ -15,7 +15,7 @@ pub fn start() {
     for i in 1..10 {
         futures.push(lazy(move || {
             let result = format!("Future {}", i).to_string();
-            thread::sleep(Duration::from_millis(random::<u8>() as u64));
+            thread::sleep(Duration::from_millis(u64::from(random::<u8>())));
             println!("{}", result);
             ok::<u32,u32>(1)
         }));

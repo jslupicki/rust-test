@@ -16,7 +16,7 @@ pub fn start() {
 
     let (sender_from_channel, receiver_from_channel): (Sender<String>, Receiver<String>) =
         mpsc::channel();
-    for &(name, percentage) in threads_params.into_iter() {
+    for &(name, percentage) in &threads_params {
         let (sender_to_channel, receiver_to_channel): (Sender<String>, Receiver<String>) =
             mpsc::channel();
         let (flag, control) = thread_control::make_pair();
@@ -33,7 +33,7 @@ pub fn start() {
                         };
                         info!("Thread '{}' responds with '{}'", name, response);
                         sender.send(response.to_string()).unwrap();
-                        let r = ((random::<u8>() as f64) / 256.0 * 100.0) as i32;
+                        let r = (f64::from(random::<u8>()) / 256.0 * 100.0) as i32;
                         debug!(
                             "Thread '{}' drew {} with threshold {}.",
                             name, r, percentage
@@ -53,10 +53,10 @@ pub fn start() {
                 }
             }
         });
-        &threads.insert(name, (thread, control, sender_to_channel));
+        threads.insert(name, (thread, control, sender_to_channel));
     }
 
-    let &&(_, _, ref sender_to_channel) = &threads.get(&threads_params[0].0).unwrap();
+    let &(_, _, ref sender_to_channel) = &threads[&threads_params[0].0];
     sender_to_channel.send("ping".to_string()).unwrap();
 
     loop {
@@ -102,7 +102,7 @@ pub fn start2() {
 
     let (main_sender, main_receiver): (Sender<(String, String)>, Receiver<(String, String)>) =
         mpsc::channel();
-    for &(name, percentage) in threads_params.into_iter() {
+    for &(name, percentage) in &threads_params {
         let (sender, receiver): (Sender<(String, String)>, Receiver<(String, String)>) =
             mpsc::channel();
         let main_sender = main_sender.clone();
@@ -147,7 +147,7 @@ pub fn start2() {
         if !sended {
             threads
                 .iter()
-                .filter(|t| t.0.to_string() == sender_name)
+                .filter(|t| t.0 == sender_name)
                 .filter(|t| !t.3.is_done())
                 .for_each(|t| t.2.send((msg.clone(), sender_name.clone())).unwrap());
         }
@@ -156,5 +156,5 @@ pub fn start2() {
 }
 
 fn test(percentage: i32) -> bool {
-    ((random::<u8>() as f64) / 256.0 * 100.0) as i32 > percentage
+    (f64::from(random::<u8>()) / 256.0 * 100.0) as i32 > percentage
 }
