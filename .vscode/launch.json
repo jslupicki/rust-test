@@ -2,6 +2,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "lldb",
+            "request": "launch",
+            "name": "rust_test LLDB",
+            "program": "${workspaceRoot}/target/debug/rust_test",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}",
+            "environment": [],
+            "externalConsole": true
+        },
+         {
             "name": "rust_test GDB",
             "type": "cppdbg",
             "request": "launch",
